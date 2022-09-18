@@ -3,22 +3,21 @@ use std::time::{SystemTime, UNIX_EPOCH};
 use std::{thread, time};
 use std::io;
 
-const TOTP_VALIDITY_DURATION: u128 = 30000; // 30 seconds
+const TOTP_DURATION: u128 = 30000; 
 const TOTP_LENGTH: u32 = 6;
 
 fn main() ->io::Result<()> {
     let mut key = String::new();
+    println!("Secret key: ");
     let stdin = io::stdin();
+
     stdin.read_line(&mut key)?;
 
-    //let key = String::from("LbfGTsah9e2cpKWgCMvDUkvdz2Fx2p");
-
     loop {
-        let totp = generate_htop(key.clone(), get_counter());
+        let totp = generate_htop(key.clone(), get_count());
         println!("Your passcode: {:06}", totp);
-        thread::sleep(time::Duration::from_millis(TOTP_VALIDITY_DURATION as u64));
+        thread::sleep(time::Duration::from_millis(TOTP_DURATION as u64));
     }
-
 }
 
 fn create_message_from_counter(mut counter: u128) -> [u8; 8] {
@@ -50,11 +49,11 @@ fn generate_htop(key: String, counter: u128) -> u32 {
 fn current_timestamp() -> u128 {
     SystemTime::now()
         .duration_since(UNIX_EPOCH)
-        .expect("Could not get the current timestamp")
+        .expect("Current time not available")
         .as_millis()
 }
 
-fn get_counter() -> u128 {
-    current_timestamp() / TOTP_VALIDITY_DURATION
+fn get_count() -> u128 {
+    current_timestamp() / TOTP_DURATION
 }
 
