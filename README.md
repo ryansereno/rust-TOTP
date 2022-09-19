@@ -2,6 +2,8 @@
 
 Generate time-based one time passcodes in the command line.
 
+Based on the [RFC 6238 Standard](https://www.rfc-editor.org/rfc/rfc6238#page-9)
+
 Getting started:
 ```
 cargo build
